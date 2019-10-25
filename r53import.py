@@ -12,8 +12,9 @@ domainName = sys.argv[2]
 r53HostedZoneId = sys.argv[3]
 batchComment = sys.argv[4]
 
+
 if (not(domainName.endswith("."))):
-    domainName = domainName + "." # Must end with `.`
+    domainName = domainName + "."  # Must end with `.`
 
 print "IMPORT " + csvFilePath + " INTO ZONE ID " + r53HostedZoneId
 
@@ -24,17 +25,17 @@ recordCount = 0
 
 r53ChangeBatch = {
     "Comment": batchComment,
-    "Changes": [ ]
+    "Changes": []
 }
 
-mxValues = [ ]
-txtValues = [ ]
+mxValues = []
+txtValues = []
 
 for row in csv:
     if (row[0] == "Name"):
         continue
 
-    record = DnsRecord(domainName, row[1], row[0], row[2], 300)
+    record = DnsRecord(domainName, row[1], row[0], row[2], 1800)
     if (record.type == "SOA" or record.type == "NS"):
         continue
 
@@ -48,12 +49,12 @@ for row in csv:
         if (not(record.value.endswith("\""))):
             record.value = record.value + "\""
 
-        txtValues.append({ "Value": record.value })
-        continue # don't add individual records to the batch
+        txtValues.append({"Value": record.value})
+        continue  # don't add individual records to the batch
 
     if (record.type == "MX"):
-        mxValues.append({ "Value": record.value })
-        continue # don't add individual records to the batch
+        mxValues.append({"Value": record.value})
+        continue  # don't add individual records to the batch
 
     r53ChangeBatch["Changes"].append(
         { 
@@ -63,7 +64,7 @@ for row in csv:
                 "Type": record.type,
                 "TTL": record.ttl,
                 "ResourceRecords": [
-                    { "Value": record.value }
+                    {"Value": record.value}
                 ]
             }
         }
@@ -98,8 +99,8 @@ if (any(txtValues)):
     )
 
 route53Client.change_resource_record_sets(
-    HostedZoneId = r53HostedZoneId,
-    ChangeBatch = r53ChangeBatch)
+    HostedZoneId=r53HostedZoneId,
+    ChangeBatch=r53ChangeBatch)
 
 print ""
 print ""
