@@ -16,7 +16,7 @@ batchComment = sys.argv[4]
 if (not(domainName.endswith("."))):
     domainName = domainName + "."  # Must end with `.`
 
-print "IMPORT " + csvFilePath + " INTO ZONE ID " + r53HostedZoneId
+print("IMPORT " + csvFilePath + " INTO ZONE ID " + r53HostedZoneId)
 
 file = open(csvFilePath)
 csv = csv.reader(file)
@@ -102,11 +102,10 @@ route53Client.change_resource_record_sets(
     HostedZoneId=r53HostedZoneId,
     ChangeBatch=r53ChangeBatch)
 
-print ""
-print ""
+print("")
 
-print json.dumps(r53ChangeBatch)
+print(json.dumps(r53ChangeBatch))
 
-print "============="
-print "# of records imported: " + str(recordCount)
-print "============="
+print("============="))
+print("# of records imported: " + str(recordCount))
+print("=============")

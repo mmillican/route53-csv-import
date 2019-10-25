@@ -13,5 +13,5 @@ class DnsRecord:
 
         self.changeAction = 'UPSERT'
         self.resourceRecords = [
-            { 'Value': self.value }
+            {'Value': self.value}
         ]
