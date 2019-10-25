@@ -14,7 +14,8 @@ parser.add_argument('--zoneId', action='store', dest='zoneId', required=True,
                     help='The Hosted Zone ID')
 parser.add_argument('-c', action='store', dest='comment', required=True,
                     help='Comment to associate with the batch update')
-# parser.add_argument('')
+parser.add_argument('-d', action='store_true', dest='debugMode', default=False,
+                    help='Debug mode. Will not make call to Route53 API')
 
 args = parser.parse_args()
 print(args)
@@ -106,9 +107,12 @@ if (any(txtValues)):
         }
     )
 
+if (not(args.debugMode)):
 route53Client.change_resource_record_sets(
     HostedZoneId=args.zoneId,
     ChangeBatch=r53ChangeBatch)
+else:
+    print("DEBUG MODE - NO UPDATES MADE")
 
 print("")
 
